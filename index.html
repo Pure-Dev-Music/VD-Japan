@@ -14,8 +14,9 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap');
         body { font-family: 'Kanit', sans-serif; }
         /* Custom Checkbox Style */
         .custom-checkbox:checked + div {
@@ -62,7 +63,8 @@
                 Bed: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>,
                 CloudRain: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>,
                 WifiOff: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="2" x2="22" y1="2" y2="22"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.68"/><path d="M10.66 5c1.3-1.01 3.22-1.3 5.34-.8 2.57.6 4.8 2 6.54 3.9"/><path d="M12 20h.01"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/></svg>,
-                Loader: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${className} animate-spin`}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                Loader: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${className} animate-spin`}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>,
+                Car: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
             };
             return icons[name] || null;
         };
@@ -179,109 +181,110 @@
 
             const itinerary = [
                 {
-                    day: 1, date: "10 ก.พ.", title: "เกียวโต: การเดินทางเริ่มต้น", location: "Kyoto",
+                    day: 1, date: "10 ก.พ.", title: "เกียวโต: เริ่มต้นทริป & เดินย่านกิออน", location: "Kyoto",
                     color: "bg-emerald-500", textColor: "text-emerald-700", bgColor: "bg-emerald-50",
                     avgWeather: { temp: "3°C - 9°C", condition: "Cloudy", icon: "CloudSun" },
-                    description: "เดินทางจากสนามบินคันไซมุ่งหน้าสู่เมืองหลวงเก่าเกียวโต",
+                    description: "เดินทางถึงเกียวโต เช็คอิน แล้วเดินเล่นจิบมัทฉะย่านเมืองเก่า",
                     activities: [
                         { time: "08:40", text: "แลนดิ้ง Kansai Airport (KIX)", icon: "Plane" },
-                        { time: "11:30", text: "Haruka Express ไป Kyoto (~75 นาที)", icon: "Train", cost: "468 ฿" },
-                        { time: "บ่าย", text: "เช็คอิน: Airbnb Townhouse (ใกล้ Kyoto Station)", icon: "Bed", extra: "เข้าพัก 10-12 ก.พ." },
-                        { time: "เย็น", text: "เดินเล่น Kamo River / Shijo Shopping Street", icon: "Camera" }
+                        { time: "10:40", text: "นั่งรถไฟ Haruka Express ไป Kyoto", icon: "Train", cost: "468 ฿" },
+                        { time: "13:00", text: "ฝากกระเป๋าที่พัก Airbnb Townhouse", icon: "Bed", extra: "เข้าพัก 10-12 ก.พ." },
+                        { time: "14:00", text: "จิบมัทฉะที่ Le Labo Cafe & เดินเล่นย่าน Gion", icon: "Coffee" },
+                        { time: "เย็น", text: "ชมศาลเจ้า Yasaka & เดินเล่นเมืองเก่ายามค่ำ", icon: "Camera" }
                     ],
                     nearby: [
-                        { name: "Nishiki Market", type: "Food/Market", desc: "ตลาดสดเก่าแก่ใจกลางเกียวโต ของกินเล่นเยอะมาก" },
-                        { name: "Pontocho Alley", type: "Nightlife", desc: "ตรอกเล็กๆ ริมน้ำที่มีร้านอาหารบรรยากาศดีเพียบ" }
+                        { name: "Gion Tanto / Gion Nanba", type: "Dinner", desc: "ร้านอาหารญี่ปุ่นดั้งเดิม หรือชาบูเนื้อวากิว" },
+                        { name: "Wagyu Volcano OAGARI", type: "Food", desc: "ข้าวหน้าเนื้อวากิว A5 และปลาไหล" }
                     ]
                 },
                 {
                     day: 2, date: "11 ก.พ.", title: "กิโมโน & กวางนารา", location: "Kyoto & Nara",
                     color: "bg-red-500", textColor: "text-red-700", bgColor: "bg-red-50",
                     avgWeather: { temp: "2°C - 10°C", condition: "Sunny", icon: "Sun" },
-                    description: "สัมผัสวัฒนธรรมญี่ปุ่นด้วยชุดกิโมโนและไปเยี่ยมกวางที่นารา",
+                    description: "ใส่กิโมโนถ่ายรูปวัดน้ำใส แล้วไปให้อาหารน้องกวางที่นารา",
                     activities: [
-                        { time: "เช้า", text: "วัด Kiyomizu-dera (เช่าชุดกิโมโน)", icon: "Camera", extra: "ชุด+ผม: 955 ฿" },
-                        { time: "บ่าย", text: "นั่งรถไฟไป Nara", icon: "Train" },
-                        { time: "เย็น", text: "วัด Todaiji & สวนกวาง Nara Park", icon: "MapPin" }
+                        { time: "10:00", text: "วัด Kiyomizu-dera (เช่าชุดกิโมโน)", icon: "Camera", extra: "ชุด+ผม: 955 ฿" },
+                        { time: "14:30", text: "นั่งรถไฟไปเมือง Nara", icon: "Train" },
+                        { time: "15:30", text: "วัด Todaiji & สวนกวาง Nara Park", icon: "MapPin" }
                     ],
                     nearby: [
-                        { name: "Sannenzaka & Ninenzaka", type: "Sightseeing", desc: "ถนนสายประวัติศาสตร์ใกล้วัดน้ำใส ถ่ายรูปสวยมาก" },
-                        { name: "Kasuga Taisha", type: "Shrine", desc: "ศาลเจ้าที่มีตะเกียงหินนับพันในนารา เดินต่อจากสวนกวางได้" }
+                        { name: "Tonkatsu Ganko Nara", type: "Food", desc: "ทงคัตสึเจ้าดังในนารา" },
+                        { name: "Kamaiki", type: "Food", desc: "ร้านอุด้งรสเด็ด" }
                     ]
                 },
                 {
-                    day: 3, date: "12 ก.พ.", title: "หมู่บ้านมรดกโลก", location: "Takayama & Shirakawago",
+                    day: 3, date: "12 ก.พ.", title: "หมู่บ้านมรดกโลก Shirakawa-go", location: "Takayama & Shirakawago",
                     color: "bg-orange-500", textColor: "text-orange-700", bgColor: "bg-orange-50",
                     avgWeather: { temp: "-4°C - 3°C", condition: "Snow", icon: "Snowflake" },
-                    description: "เดินทางสู่เมืองเก่าท่ามกลางหุบเขาและหมู่บ้านหิมะ (หนาวมาก!)",
+                    description: "นั่งรถตู้ลุยหิมะไปหมู่บ้านโบราณชิราคาวาโกะ",
                     activities: [
-                        { time: "เช้า", text: "Shinkansen จาก Nagoya -> Takayama", icon: "Train", cost: "1,500 ฿" },
-                        { time: "เที่ยง", text: "เช็คอิน: Airbnb Traditional House", icon: "Bed", extra: "เข้าพัก 12-14 ก.พ." },
-                        { time: "บ่าย", text: "นั่งบัสไป Shirakawa-go", icon: "Camera" },
-                        { time: "ค่ำ", text: "พักผ่อนในเมือง Takayama", icon: "Utensils" }
+                        { time: "09:30", text: "รถตู้มารับเดินทางไป Takayama", icon: "Car", cost: "รวมในแพ็คเกจ?" },
+                        { time: "15:00", text: "เที่ยวหมู่บ้านมรดกโลก Shirakawa-go", icon: "Camera" },
+                        { time: "เย็น", text: "เช็คอิน: Airbnb Traditional House", icon: "Bed", extra: "เข้าพัก 12-14 ก.พ." },
+                        { time: "ค่ำ", text: "ทานมื้อเย็น (เนื้อฮิดะ) ในเมือง Takayama", icon: "Utensils" }
                     ],
                     nearby: [
-                        { name: "Hida Folk Village", type: "Culture", desc: "พิพิธภัณฑ์กลางแจ้งแสดงบ้านโบราณ (คล้าย Shirakawa-go แต่อยู่ในเมือง)" },
-                        { name: "Sanmachi Suji", type: "Shopping", desc: "ย่านเมืองเก่าที่มีร้านขายสาเกและเนื้อฮิดะเสียบไม้" }
+                        { name: "Heianraku", type: "Food", desc: "ร้านอาหารจีน-ญี่ปุ่นชื่อดัง (ควรจอง)" },
+                        { name: "Suzuya Restaurant", type: "Food", desc: "ชาบูเนื้อฮิดะ" }
                     ]
                 },
                 {
-                    day: 4, date: "13 ก.พ.", title: "ยอดเขาสูง & ย่านกูลิโกะ", location: "Takayama & Osaka",
+                    day: 4, date: "13 ก.พ.", title: "ยอดเขาสูง Japan Alps", location: "Takayama & Okuhida",
                     color: "bg-blue-500", textColor: "text-blue-700", bgColor: "bg-blue-50",
                     avgWeather: { temp: "-6°C - 5°C", condition: "Snow/Cloudy", icon: "Snowflake" },
-                    description: "ชมวิวมุมสูงจากกระเช้า (หนาวจัด) ก่อนมุ่งหน้าสู่แสงสีของโอซาก้า",
+                    description: "ขึ้นกระเช้าชมวิวเทือกเขาหิมะ แล้วกลับมาเดินเล่นเมืองเก่า",
                     activities: [
-                        { time: "เช้า", text: "Shinhotaka Ropeway", icon: "Mountain", cost: "720 ฿" },
-                        { time: "กลางวัน", text: "เดินเล่นเมืองเก่า Takayama", icon: "ShoppingBag" },
-                        { time: "บ่าย", text: "นั่งรถไฟกลับเข้า Osaka", icon: "Train", cost: "1,700 ฿" },
-                        { time: "เย็น", text: "เช็คอิน: Fourz Hotel Kintetsu Osaka-Namba", icon: "Bed", extra: "เข้าพัก 14-16 ก.พ." }
+                        { time: "เช้า", text: "Shinhotaka Ropeway ชมวิว Japan Alps", icon: "Mountain", cost: "720 ฿" },
+                        { time: "บ่าย", text: "เดินเล่นย่านเมืองเก่า Takayama Old Town", icon: "ShoppingBag" },
+                        { time: "เย็น", text: "พักผ่อนที่บ้านพัก Takayama", icon: "Bed" }
                     ],
                     nearby: [
-                        { name: "Dotonbori", type: "Street Food", desc: "สวรรค์ของนักกิน ของอร่อยทุกมุมใกล้ป้ายกูลิโกะ" },
-                        { name: "Amerikamura", type: "Fashion", desc: "ย่านวัยรุ่นโอซาก้าที่มีร้านเสื้อผ้าแนวๆ เยอะ" }
+                        { name: "Hida Beef Ramen", type: "Food", desc: "ราเมงเนื้อฮิดะ Menya Shirakawa" },
+                        { name: "Sanmachi Suji", type: "Walking St.", desc: "ถนนสายเมืองเก่า ถ่ายรูปสวยมาก" }
                     ]
                 },
                 {
-                    day: 5, date: "14 ก.พ.", title: "วาเลนไทน์ที่ USJ", location: "Osaka",
+                    day: 5, date: "14 ก.พ.", title: "เข้าเมือง Osaka & ชมวิวริมน้ำ", location: "Osaka",
                     color: "bg-yellow-500", textColor: "text-yellow-700", bgColor: "bg-yellow-50",
                     avgWeather: { temp: "5°C - 12°C", condition: "Sunny", icon: "Sun" },
-                    description: "ตะลุยโลกสวนสนุกและชิมของอร่อยที่ตลาดปลา (อากาศดี)",
+                    description: "เดินทางเข้าโอซาก้า เช็คอิน แล้วไปถ่ายรูปคาเฟ่ริมน้ำสุดชิลล์",
                     activities: [
-                        { time: "เช้า", text: "ตลาดปลา Kurumon", icon: "Utensils" },
-                        { time: "ทั้งวัน", text: "Universal Studios Japan", icon: "Camera", cost: "2,080 ฿" },
-                        { time: "ค่ำ", text: "Namba Nightlife / ดริ้งจอยๆ", icon: "Coffee" }
+                        { time: "08:00", text: "รถตู้รับเข้าเมือง Osaka", icon: "Car" },
+                        { time: "14:00", text: "ปราสาท Osaka Castle", icon: "MapPin" },
+                        { time: "15:00", text: "คาเฟ่ริมน้ำ Moto Coffee / Mount Kitahama", icon: "Coffee" },
+                        { time: "17:00", text: "Aquarium Kaiyukan (Optional)", icon: "Info", extra: "560 ฿" },
+                        { time: "19:00", text: "เดินเล่น Dotonbori (ป้ายกูลิโกะ)", icon: "Camera" },
+                        { time: "ค่ำ", text: "เช็คอิน: Fourz Hotel Kintetsu Osaka-Namba", icon: "Bed", extra: "เข้าพัก 14-16 ก.พ." }
                     ],
                     nearby: [
-                        { name: "Shinsekai", type: "Iconic Area", desc: "ย่านเก่าแก่ที่มีหอคอย Tsutenkaku และคุชิคัตสึ (ของทอด) ชื่อดัง" },
-                        { name: "Namba Parks", type: "Mall/Garden", desc: "ห้างสรรพสินค้าที่ออกแบบมีสวนบนดาดฟ้า สวยมากยามเย็น" }
+                        { name: "Namba Yasaka Jinja", type: "Shrine", desc: "ศาลเจ้าหัวสิงโตยักษ์" },
+                        { name: "Umeda Sky Building", type: "Viewpoint", desc: "ตึกสูงชมวิวเมือง 360 องศา" }
                     ]
                 },
                 {
-                    day: 6, date: "15 ก.พ.", title: "ปราสาท & คาเฟ่ริมน้ำ", location: "Osaka",
+                    day: 6, date: "15 ก.พ.", title: "ตะลุย Universal Studios Japan", location: "Osaka",
                     color: "bg-purple-500", textColor: "text-purple-700", bgColor: "bg-purple-50",
                     avgWeather: { temp: "4°C - 11°C", condition: "Cloudy", icon: "CloudSun" },
-                    description: "วันพักผ่อน เดินชมปราสาทและนั่งคาเฟ่ชิลล์ๆ",
+                    description: "วันแห่งความสนุก! อยู่ใน USJ เต็มวัน (ถ้าไหวไปดริ้งต่อ)",
                     activities: [
-                        { time: "สาย", text: "Slow Morning", icon: "Clock" },
-                        { time: "บ่าย", text: "Osaka Castle & สวนรอบปราสาท", icon: "MapPin" },
-                        { time: "บ่ายแก่", text: "คาเฟ่ Brooklyn Roasting Company", icon: "Coffee" },
-                        { time: "เย็น", text: "อิสระช้อปปิ้งในเมือง", icon: "ShoppingBag" }
+                        { time: "ทั้งวัน", text: "Universal Studios Japan (USJ)", icon: "Sparkles", cost: "2,080 ฿" },
+                        { time: "ค่ำ", text: "Namba Nightlife / ดริ้งจอยๆ (ถ้ายังไหว)", icon: "Coffee" }
                     ],
                     nearby: [
-                        { name: "Nakanoshima Park", type: "Garden", desc: "สวนริมน้ำบรรยากาศดี เหมาะแก่การเดินเล่นใกล้คาเฟ่ Kitahama" },
-                        { name: "Umeda Sky Building", type: "Viewpoint", desc: "ชมวิวเมืองโอซาก้าแบบ 360 องศา" }
+                        { name: "Super Nintendo World", type: "Zone", desc: "โซนยอดฮิต ต้องจองคิวเข้าผ่านแอป" },
+                        { name: "Harry Potter", type: "Zone", desc: "ห้ามพลาด Butterbeer" }
                     ]
                 },
                 {
-                    day: 7, date: "16 ก.พ.", title: "ช้อปปิ้งวันสุดท้าย", location: "Osaka -> KIX",
+                    day: 7, date: "16 ก.พ.", title: "ตลาดปลา & ช้อปปิ้งก่อนกลับ", location: "Osaka -> KIX",
                     color: "bg-slate-700", textColor: "text-slate-900", bgColor: "bg-slate-100",
                     avgWeather: { temp: "5°C - 12°C", condition: "Sunny", icon: "Sun" },
-                    description: "ซื้อของฝากก่อนเดินทางกลับโดยสวัสดิภาพ",
+                    description: "หาของกินปิดท้ายที่ตลาดปลา แล้วช้อปปิ้งก่อนไปสนามบิน",
                     activities: [
-                        { time: "เช้า-บ่าย", text: "Last minute shopping", icon: "ShoppingBag" },
+                        { time: "เช้า", text: "ตลาดปลา Kuromon Market", icon: "Utensils" },
+                        { time: "บ่าย", text: "เดินเล่น Dotonbori / Shinsaibashi", icon: "ShoppingBag" },
                         { time: "18:00", text: "เดินทางไปสนามบิน Kansai", icon: "Train" },
-                        { time: "19:00", text: "Check-in @ KIX", icon: "Plane" },
-                        { time: "21:00", text: "Departure", icon: "Plane" }
+                        { time: "21:00", text: "Departure กลับไทย", icon: "Plane" }
                     ],
                     nearby: [
                         { name: "Rinku Town Outlet", type: "Shopping", desc: "เอาท์เล็ตขนาดใหญ่ใกล้สนามบิน แวะก่อนกลับได้" }
@@ -361,15 +364,14 @@
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {itinerary.map((day) => (
                                         <div key={day.day} onClick={() => {setViewMode('details'); setActiveDay(day.day);}} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all cursor-pointer">
-                                            <div className="flex justify-between items-start mb-4">
+                                            <div className="flex justify-between items-center mb-4">
                                                 <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase ${day.color} text-white`}>Day {day.day}</span>
                                                 <div className="flex flex-col items-end gap-1">
-                                                    {/* Avg Weather (Always Visible) */}
-                                                    <div className="flex items-center gap-1.5 bg-orange-50 px-2 py-1 rounded-lg border border-orange-100">
-                                                        <Icon name={day.avgWeather.icon} className="w-3 h-3 text-orange-400" />
-                                                        <span className="text-xs font-bold text-orange-700">{day.avgWeather.temp} (Avg)</span>
+                                                    <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-lg">
+                                                        <Icon name={day.avgWeather.icon} className="w-3 h-3 text-slate-500" />
+                                                        <span className="text-xs font-bold text-slate-600">{day.avgWeather.temp} (Avg)</span>
                                                     </div>
-                                                    
+                                                                                                      
                                                     {/* Loading Indicator */}
                                                     {isLoadingWeather && (
                                                         <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-lg border border-slate-200 animate-pulse">
@@ -379,8 +381,9 @@
                                                     )}
 
                                                     {/* Live Weather (Only if available and not loading) */}
+                                               
                                                     {!isLoadingWeather && liveWeather[day.day] && (
-                                                        <div className="flex items-center gap-1.5 bg-emerald-100 px-2 py-1 rounded-lg border border-emerald-200 animate-in fade-in slide-in-from-top-1">
+                                                        <div className="flex items-center gap-1.5 bg-emerald-100 px-2 py-1 rounded-lg animate-in fade-in slide-in-from-top-1">
                                                             <Icon name={liveWeather[day.day].icon} className="w-3 h-3 text-emerald-600" />
                                                             <span className="text-xs font-bold text-emerald-700">{liveWeather[day.day].temp} (Live)</span>
                                                         </div>
