@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Japan Trip 2026 - Itinerary</title>
+    <!-- Favicon: Japan Flag Emoji -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇯🇵</text></svg>">
-
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM CDN -->
@@ -58,7 +59,9 @@
                 AlertTriangle: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
                 ExternalLink: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>,
                 CheckSquare: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>,
-                Bed: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                Bed: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>,
+                CloudRain: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>,
+                WifiOff: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="2" x2="22" y1="2" y2="22"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.68"/><path d="M10.66 5c1.3-1.01 3.22-1.3 5.34-.8 2.57.6 4.8 2 6.54 3.9"/><path d="M12 20h.01"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/></svg>
             };
             return icons[name] || null;
         };
@@ -66,17 +69,99 @@
         const App = () => {
             const [viewMode, setViewMode] = useState('summary');
             const [activeDay, setActiveDay] = useState(1);
-            
-            // State for Checkboxes with LocalStorage Persistence
             const [checkedItems, setCheckedItems] = useState(() => {
                 const saved = localStorage.getItem('japanTripPackingList');
                 return saved ? JSON.parse(saved) : {};
             });
+            
+            // New State for Live Weather
+            const [liveWeather, setLiveWeather] = useState({});
+            const [isApiError, setIsApiError] = useState(false);
 
-            // Effect to save to LocalStorage whenever checkedItems changes
             useEffect(() => {
                 localStorage.setItem('japanTripPackingList', JSON.stringify(checkedItems));
             }, [checkedItems]);
+
+            // WEATHER API FETCHING LOGIC
+            useEffect(() => {
+                const fetchWeather = async () => {
+                    // Coordinates for trip locations
+                    const locations = {
+                        1: { lat: 35.0116, lon: 135.7681 }, // Kyoto
+                        2: { lat: 34.6851, lon: 135.8048 }, // Nara
+                        3: { lat: 36.1408, lon: 137.2513 }, // Takayama
+                        4: { lat: 36.1408, lon: 137.2513 }, // Takayama
+                        5: { lat: 34.6937, lon: 135.5023 }, // Osaka
+                        6: { lat: 34.6937, lon: 135.5023 }, // Osaka
+                        7: { lat: 34.3402, lon: 135.2396 }  // KIX Airport area
+                    };
+                    
+                    // Travel Dates (YYYY-MM-DD)
+                    const dates = {
+                        1: "2026-02-10",
+                        2: "2026-02-11",
+                        3: "2026-02-12",
+                        4: "2026-02-13",
+                        5: "2026-02-14",
+                        6: "2026-02-15",
+                        7: "2026-02-16"
+                    };
+
+                    const newWeatherData = {};
+                    let errorOccurred = false;
+
+                    // Helper to map WMO code to our icons and description
+                    const getWeatherInfo = (code) => {
+                        if (code === 0) return { icon: "Sun", cond: "Clear Sky" };
+                        if (code <= 3) return { icon: "CloudSun", cond: "Partly Cloudy" };
+                        if (code <= 48) return { icon: "CloudSun", cond: "Foggy" };
+                        if (code <= 67) return { icon: "CloudRain", cond: "Rainy" };
+                        if (code <= 77) return { icon: "Snowflake", cond: "Snow" };
+                        if (code <= 82) return { icon: "CloudRain", cond: "Showers" };
+                        if (code <= 86) return { icon: "Snowflake", cond: "Snow Showers" };
+                        return { icon: "CloudRain", cond: "Rain/Storm" };
+                    };
+
+                    // Try to fetch for each day
+                    // Note: API might fail if dates are too far in future (>14 days from 'now')
+                    for (let day = 1; day <= 7; day++) {
+                        const { lat, lon } = locations[day];
+                        const date = dates[day];
+                        
+                        try {
+                            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=Asia%2FTokyo&start_date=${date}&end_date=${date}`;
+                            
+                            const response = await fetch(url);
+                            if (!response.ok) throw new Error('Date out of range or API error');
+                            
+                            const data = await response.json();
+                            if (data.daily) {
+                                const min = Math.round(data.daily.temperature_2m_min[0]);
+                                const max = Math.round(data.daily.temperature_2m_max[0]);
+                                const code = data.daily.weathercode[0];
+                                const info = getWeatherInfo(code);
+                                
+                                newWeatherData[day] = {
+                                    temp: `${min}°C - ${max}°C`,
+                                    condition: info.cond,
+                                    icon: info.icon,
+                                    isLive: true
+                                };
+                            }
+                        } catch (e) {
+                            console.log(`Weather fetch failed for day ${day}:`, e);
+                            errorOccurred = true;
+                        }
+                    }
+
+                    if (Object.keys(newWeatherData).length > 0) {
+                        setLiveWeather(newWeatherData);
+                    }
+                    if (errorOccurred) setIsApiError(true);
+                };
+
+                fetchWeather();
+            }, []);
 
             const toggleItem = (category, itemIndex) => {
                 const key = `${category}-${itemIndex}`;
@@ -90,7 +175,7 @@
                 {
                     day: 1, date: "10 ก.พ.", title: "เกียวโต: การเดินทางเริ่มต้น", location: "Kyoto",
                     color: "bg-emerald-500", textColor: "text-emerald-700", bgColor: "bg-emerald-50",
-                    weather: { temp: "3°C - 9°C", condition: "Cloudy", icon: "CloudSun" },
+                    avgWeather: { temp: "3°C - 9°C", condition: "Cloudy", icon: "CloudSun" },
                     description: "เดินทางจากสนามบินคันไซมุ่งหน้าสู่เมืองหลวงเก่าเกียวโต",
                     activities: [
                         { time: "08:40", text: "แลนดิ้ง Kansai Airport (KIX)", icon: "Plane" },
@@ -106,7 +191,7 @@
                 {
                     day: 2, date: "11 ก.พ.", title: "กิโมโน & กวางนารา", location: "Kyoto & Nara",
                     color: "bg-red-500", textColor: "text-red-700", bgColor: "bg-red-50",
-                    weather: { temp: "2°C - 10°C", condition: "Sunny", icon: "Sun" },
+                    avgWeather: { temp: "2°C - 10°C", condition: "Sunny", icon: "Sun" },
                     description: "สัมผัสวัฒนธรรมญี่ปุ่นด้วยชุดกิโมโนและไปเยี่ยมกวางที่นารา",
                     activities: [
                         { time: "เช้า", text: "วัด Kiyomizu-dera (เช่าชุดกิโมโน)", icon: "Camera", extra: "ชุด+ผม: 955 ฿" },
@@ -121,7 +206,7 @@
                 {
                     day: 3, date: "12 ก.พ.", title: "หมู่บ้านมรดกโลก", location: "Takayama & Shirakawago",
                     color: "bg-orange-500", textColor: "text-orange-700", bgColor: "bg-orange-50",
-                    weather: { temp: "-4°C - 3°C", condition: "Snow", icon: "Snowflake" },
+                    avgWeather: { temp: "-4°C - 3°C", condition: "Snow", icon: "Snowflake" },
                     description: "เดินทางสู่เมืองเก่าท่ามกลางหุบเขาและหมู่บ้านหิมะ (หนาวมาก!)",
                     activities: [
                         { time: "เช้า", text: "Shinkansen จาก Nagoya -> Takayama", icon: "Train", cost: "1,500 ฿" },
@@ -137,7 +222,7 @@
                 {
                     day: 4, date: "13 ก.พ.", title: "ยอดเขาสูง & ย่านกูลิโกะ", location: "Takayama & Osaka",
                     color: "bg-blue-500", textColor: "text-blue-700", bgColor: "bg-blue-50",
-                    weather: { temp: "-6°C - 5°C", condition: "Snow/Cloudy", icon: "Snowflake" },
+                    avgWeather: { temp: "-6°C - 5°C", condition: "Snow/Cloudy", icon: "Snowflake" },
                     description: "ชมวิวมุมสูงจากกระเช้า (หนาวจัด) ก่อนมุ่งหน้าสู่แสงสีของโอซาก้า",
                     activities: [
                         { time: "เช้า", text: "Shinhotaka Ropeway", icon: "Mountain", cost: "720 ฿" },
@@ -153,7 +238,7 @@
                 {
                     day: 5, date: "14 ก.พ.", title: "วาเลนไทน์ที่ USJ", location: "Osaka",
                     color: "bg-yellow-500", textColor: "text-yellow-700", bgColor: "bg-yellow-50",
-                    weather: { temp: "5°C - 12°C", condition: "Sunny", icon: "Sun" },
+                    avgWeather: { temp: "5°C - 12°C", condition: "Sunny", icon: "Sun" },
                     description: "ตะลุยโลกสวนสนุกและชิมของอร่อยที่ตลาดปลา (อากาศดี)",
                     activities: [
                         { time: "เช้า", text: "ตลาดปลา Kurumon", icon: "Utensils" },
@@ -168,7 +253,7 @@
                 {
                     day: 6, date: "15 ก.พ.", title: "ปราสาท & คาเฟ่ริมน้ำ", location: "Osaka",
                     color: "bg-purple-500", textColor: "text-purple-700", bgColor: "bg-purple-50",
-                    weather: { temp: "4°C - 11°C", condition: "Cloudy", icon: "CloudSun" },
+                    avgWeather: { temp: "4°C - 11°C", condition: "Cloudy", icon: "CloudSun" },
                     description: "วันพักผ่อน เดินชมปราสาทและนั่งคาเฟ่ชิลล์ๆ",
                     activities: [
                         { time: "สาย", text: "Slow Morning", icon: "Clock" },
@@ -184,7 +269,7 @@
                 {
                     day: 7, date: "16 ก.พ.", title: "ช้อปปิ้งวันสุดท้าย", location: "Osaka -> KIX",
                     color: "bg-slate-700", textColor: "text-slate-900", bgColor: "bg-slate-100",
-                    weather: { temp: "5°C - 12°C", condition: "Sunny", icon: "Sun" },
+                    avgWeather: { temp: "5°C - 12°C", condition: "Sunny", icon: "Sun" },
                     description: "ซื้อของฝากก่อนเดินทางกลับโดยสวัสดิภาพ",
                     activities: [
                         { time: "เช้า-บ่าย", text: "Last minute shopping", icon: "ShoppingBag" },
@@ -242,7 +327,7 @@
                                     </div>
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 blur-3xl rounded-full -mr-20 -mt-20"></div>
                                 </div>
-                                
+
                                 {/* Accommodations Section */}
                                 <div className="bg-indigo-50 rounded-3xl p-6 border border-indigo-100">
                                     <h3 className="font-bold text-indigo-700 flex items-center gap-2 mb-4 text-xl">
@@ -270,11 +355,21 @@
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {itinerary.map((day) => (
                                         <div key={day.day} onClick={() => {setViewMode('details'); setActiveDay(day.day);}} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all cursor-pointer">
-                                            <div className="flex justify-between items-center mb-4">
+                                            <div className="flex justify-between items-start mb-4">
                                                 <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase ${day.color} text-white`}>Day {day.day}</span>
-                                                <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded-lg">
-                                                    <Icon name={day.weather.icon} className="w-3 h-3 text-slate-500" />
-                                                    <span className="text-xs font-bold text-slate-600">{day.weather.temp}</span>
+                                                <div className="flex flex-col items-end gap-1">
+                                                    {/* Avg Weather (Always Visible) */}
+                                                    <div className="flex items-center gap-1.5 bg-orange-50 px-2 py-1 rounded-lg border border-orange-100">
+                                                        <Icon name={day.avgWeather.icon} className="w-3 h-3 text-orange-400" />
+                                                        <span className="text-xs font-bold text-orange-700">{day.avgWeather.temp} (Avg)</span>
+                                                    </div>
+                                                    {/* Live Weather (Only if available) */}
+                                                    {liveWeather[day.day] && (
+                                                        <div className="flex items-center gap-1.5 bg-emerald-100 px-2 py-1 rounded-lg border border-emerald-200 animate-in fade-in slide-in-from-top-1">
+                                                            <Icon name={liveWeather[day.day].icon} className="w-3 h-3 text-emerald-600" />
+                                                            <span className="text-xs font-bold text-emerald-700">{liveWeather[day.day].temp} (Live)</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                             <h3 className="font-bold text-slate-800 leading-snug">{day.title}</h3>
@@ -381,15 +476,31 @@
                                             <div className={`${itinerary[activeDay-1].color} p-8 text-white`}>
                                                 <div className="flex justify-between items-start">
                                                     <span className="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Day {activeDay} • {itinerary[activeDay-1].date}</span>
-                                                    <div className="flex flex-col items-end">
-                                                        <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-xl">
-                                                            <Icon name={itinerary[activeDay-1].weather.icon} className="w-5 h-5 text-white" />
-                                                            <span className="font-bold">{itinerary[activeDay-1].weather.temp}</span>
+                                                    <div className="flex flex-col items-end gap-2">
+                                                        {/* Avg Weather */}
+                                                        <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
+                                                            <Icon name={itinerary[activeDay-1].avgWeather.icon} className="w-5 h-5 text-white/80" />
+                                                            <div className="flex flex-col items-end">
+                                                                <span className="font-bold text-sm">{itinerary[activeDay-1].avgWeather.temp}</span>
+                                                                <span className="text-[9px] text-white/60 uppercase">Avg Forecast</span>
+                                                            </div>
                                                         </div>
-                                                        <span className="text-[10px] font-medium text-white/80 mt-1">{itinerary[activeDay-1].weather.condition}</span>
+                                                        {/* Live Weather (if available) */}
+                                                        {liveWeather[activeDay] && (
+                                                            <div className="flex items-center gap-2 bg-emerald-500/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-emerald-400 shadow-lg animate-in fade-in slide-in-from-right-2">
+                                                                <div className="relative">
+                                                                    <Icon name={liveWeather[activeDay].icon} className="w-5 h-5 text-white" />
+                                                                    <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-400 border border-emerald-500 animate-pulse"></span>
+                                                                </div>
+                                                                <div className="flex flex-col items-end">
+                                                                    <span className="font-bold text-sm">{liveWeather[activeDay].temp}</span>
+                                                                    <span className="text-[9px] text-emerald-100 uppercase">Live Update</span>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
-                                                <h2 className="text-3xl font-black mt-2">{itinerary[activeDay-1].title}</h2>
+                                                <h2 className="text-3xl font-black mt-4">{itinerary[activeDay-1].title}</h2>
                                                 <p className="text-white/80 mt-2 font-medium italic">{itinerary[activeDay-1].description}</p>
                                             </div>
                                             <div className="p-8">
@@ -450,6 +561,15 @@
                                                         <span className="text-[10px] text-slate-400">เช็คไปแล้ว {Object.values(checkedItems).filter(x => x).length} รายการ</span>
                                                     </div>
                                                 </div>
+                                                {isApiError && (
+                                                    <div className="flex items-center gap-3 mt-2 pt-2 border-t border-white/10">
+                                                        <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center"><Icon name="WifiOff" className="w-4 h-4 text-orange-400" /></div>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-xs font-medium text-orange-300">Live Weather N/A</span>
+                                                            <span className="text-[9px] text-white/40">Using historical data only</span>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
